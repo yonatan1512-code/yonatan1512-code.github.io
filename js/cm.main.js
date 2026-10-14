@@ -25,6 +25,8 @@ async function boot() {
   // on this computer: bring back anything this browser lost from the backup file, then keep the file up to date
   let restored = [];
   try { restored = await CM.backup.start(); } catch (e) { console.error(e); }
+  // accounts and sync between devices (the public website and the local server; not inside claude.ai)
+  try { await CM.sync.init(); } catch (e) { console.error(e); }
   CM.shell.saveState();
 
   // the saved profile can arrive from the account after the welcome screen opened

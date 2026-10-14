@@ -411,3 +411,14 @@ body[data-route="onboarding"] #view { max-width: none; padding: 0; }
 .week-list .ic { color: var(--accent); }
 .about ul { display: grid; gap: 8px; }
 .load .warn, .load .ok-line { margin-top: 4px; }
+
+/* ---------- account ---------- */
+.acc { display: grid; gap: 18px; max-width: 680px; }
+.acc-form, .acc-pass { display: grid; gap: 14px; }
+.acc-form .btn.lg { justify-self: start; }
+details.panel > summary.sum-h { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 800; font-size: 17px; list-style: none; }
+details.panel > summary.sum-h::-webkit-details-marker { display: none; }
+details.panel > summary.sum-h .ic { color: var(--accent); }
+details.panel[open] > summary.sum-h { margin-bottom: 6px; }
+.save-state { text-decoration: none; }
+a.save-state:hover { color: var(--text); }

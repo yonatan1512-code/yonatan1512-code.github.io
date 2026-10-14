@@ -29,7 +29,7 @@ const shell = CM.shell = {
       '<aside class="side" aria-label="ניווט ראשי">' +
         '<a class="brand" href="#dashboard" aria-label="CourtMaster AI, לוח הבקרה">' + logo() + '<span><b>CourtMaster</b> AI</span></a>' +
         '<nav class="side-nav">' + CM.NAV.map(n => '<a href="#' + n.id + '" data-nav="' + n.id + '">' + icon(n.i) + '<span>' + n.t + '</span></a>').join('') + '</nav>' +
-        '<div class="side-foot"><span class="save-state" data-save></span></div>' +
+        '<div class="side-foot"><a class="save-state" href="#account" data-save></a></div>' +
       '</aside>' +
       '<div class="main">' +
         '<header class="top"><a class="brand sm" href="#dashboard" aria-label="לוח הבקרה">' + logo() + '<span><b>CourtMaster</b> AI</span></a><span class="top-title" data-top-title></span></header>' +
@@ -47,7 +47,9 @@ const shell = CM.shell = {
   saveState() {
     const el = $('[data-save]');
     if (!el) return;
-    const b = CM.backup || {};
+    const b = CM.backup || {}, s = CM.sync || {};
+    const SYNC = {ok: ['check', 'מסונכרן לחשבון שלך'], syncing: ['refresh', 'מסנכרן…'], offline: ['alert', 'אין אינטרנט. יסונכרן כשיחזור'], error: ['alert', 'הסנכרון נכשל. הנתונים שמורים במכשיר']};
+    if (s.user && SYNC[s.state]) { el.innerHTML = icon(SYNC[s.state][0]) + SYNC[s.state][1]; return; }
     el.innerHTML = store.mode === 'cloud'
       ? icon('check') + 'נשמר בחשבון claude.ai הפרטי שלך'
       : b.on && !b.lastError ? icon('check') + 'נשמר בדפדפן ובקובץ גיבוי במחשב'

@@ -54,6 +54,7 @@ function stepHtml() {
   const d = draft;
   switch (step) {
     case 0: return '<h2>נעים להכיר</h2><p class="lead">כמה פרטים כדי שהתוכנית תתאים לך. אנחנו לא מבקשים כתובת, בית ספר או טלפון.</p>' +
+      (CM.sync && CM.sync.available ? '<p class="note">' + icon('user') + '<span>כבר יש לך חשבון? <a href="#account">התחבר</a>, והאימונים שלך יחזרו.</span></p>' : '') +
       UI.field('איך לקרוא לך?', '<input name="name" maxlength="30" autocomplete="nickname" value="' + esc(d.name) + '" placeholder="שם פרטי או כינוי">', 'לא חובה.') +
       '<div class="row2">' + UI.field('גיל', '<input name="age" type="number" inputmode="numeric" min="8" max="19" value="' + d.age + '">') +
       UI.field('גובה (ס״מ)', '<input name="height" type="number" inputmode="numeric" min="110" max="230" value="' + d.height + '">') + '</div>';

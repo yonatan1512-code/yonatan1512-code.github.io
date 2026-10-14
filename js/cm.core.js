@@ -242,7 +242,7 @@ function render(opts) {
   let {name, param} = parseHash();
   if (!routes[name]) { name = 'dashboard'; param = ''; }
   const prof = store.get('profile');
-  if (prof && !prof.onboarded && name !== 'onboarding') { location.replace('#onboarding'); return; }
+  if (prof && !prof.onboarded && name !== 'onboarding' && name !== 'account') { location.replace('#onboarding'); return; }
   const def = routes[name];
   // a fresh element each time, so listeners a page added last time are gone
   const old = $('#view');

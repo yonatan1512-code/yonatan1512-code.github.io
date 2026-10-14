@@ -191,6 +191,8 @@ CM.page('profile', {
       '<section class="panel"><div class="panel-head"><h2>' + icon('cal') + 'השבוע הקבוע</h2><button type="button" class="btn ghost sm" data-template>' + icon('edit') + 'עריכה</button></div>' +
         '<ul class="week-list">' + p.days.map((d, i) => '<li><b>' + CM.DAY_NAMES[i] + '</b><span>' + icon(CM.MODES[d.mode].icon) + CM.MODES[d.mode].name + (d.mode === 'rest' ? '' : ' · ' + d.start + ' · ' + d.min + ' דק׳') + '</span></li>').join('') + '</ul>' +
         '<p class="muted small">' + CM.fmtMinutes(w.minutes) + ' בשבוע · ' + w.practices + ' אימוני כדורסל · ' + w.rest + ' ימי מנוחה</p></section>' +
+      (CM.sync.available ? '<section class="panel"><div class="panel-head"><h2>' + icon('users') + 'חשבון וסנכרון בין מכשירים</h2><a class="btn ghost sm" href="#account">' + icon('next') + (CM.sync.user ? 'לחשבון' : 'התחבר') + '</a></div>' +
+        '<p class="muted">' + (CM.sync.user ? 'מחובר: <span dir="ltr">' + esc(CM.sync.user.email || '') + '</span>. האימונים נשמרים בחשבון ומופיעים בכל מכשיר.' : 'לא מחובר. כשמתחברים, האימונים נשמרים בחשבון ומופיעים בכל מחשב וטלפון.') + '</p></section>' : '') +
       '<section class="panel"><h2>' + icon('shield') + 'פרטיות ונתונים</h2>' +
         '<p class="note">' + icon(store.mode === 'cloud' || CM.backup.on ? 'check' : 'info') + (store.mode === 'cloud' ? 'הנתונים נשמרים בחשבון claude.ai הפרטי שלך, ורק אתה רואה אותם. עותק נשמר גם בדפדפן הזה.'
           : CM.backup.on ? '<span>הנתונים נשמרים בדפדפן הזה, ועותק גיבוי נשמר אוטומטית בקובץ במחשב (בתיקיית האתר, בתיקייה <code>data</code>), כולל עותק לכל יום בשבועיים האחרונים. אם הדפדפן יאבד את הנתונים, הם יחזרו מהקובץ.</span>'
@@ -250,9 +252,10 @@ CM.page('profile', {
       if (e.target.closest('[data-template]')) CM.weekTemplateDialog();
       else if (e.target.closest('[data-export]')) exportData();
       else if (e.target.closest('[data-wipe]')) {
-        const ok = await CM.confirmBox('למחוק את כל הנתונים?', 'הפרופיל, התוכנית, האימונים, המבחנים, המטרות והשיחות יימחקו' + (store.mode === 'cloud' ? ' מהדפדפן ומהחשבון שלך' : CM.backup.on ? ' מהדפדפן ומקובץ הגיבוי. עותק של המצב לפני המחיקה יישאר בתיקייה data במחשב' : ' מהדפדפן הזה') + '. אי אפשר לבטל את זה.', 'מחק הכל', true);
+        const ok = await CM.confirmBox('למחוק את כל הנתונים?', 'הפרופיל, התוכנית, האימונים, המבחנים, המטרות והשיחות יימחקו' + (store.mode === 'cloud' ? ' מהדפדפן ומהחשבון שלך' : CM.backup.on ? ' מהדפדפן ומקובץ הגיבוי. עותק של המצב לפני המחיקה יישאר בתיקייה data במחשב' : ' מהדפדפן הזה') + '. אי אפשר לבטל את זה.' + (CM.sync.user ? ' העותק בחשבון שלך נשאר, ותצא מהחשבון במכשיר הזה.' : ''), 'מחק הכל', true);
         if (!ok) return;
         ai.mem = [];
+        if (CM.sync.available) await CM.sync.beforeWipe();
         await store.wipe();
         store.set('meta', {migrated: true});
         CM.toast('כל הנתונים נמחקו');
