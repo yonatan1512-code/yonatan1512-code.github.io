@@ -38,6 +38,8 @@ async function boot() {
   CM.render();
   if (restored.length) CM.toast('הנתונים שלך שוחזרו מקובץ הגיבוי במחשב', 'win');
 
+  // the service worker that shows training reminders (public site and local server only)
+  if (CM.push) CM.push.register();
   CM.ai.detect().then(() => { if (CM.parseHash().name === 'coach') CM.render({keep: true}); });
   try {
     const n = await CM.migrateOld();

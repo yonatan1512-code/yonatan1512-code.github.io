@@ -6,6 +6,8 @@
 'use strict';
 CM.SUPABASE = {
   url: 'https://czdqmpptguxaneqovbiw.supabase.co',
-  key: 'sb_publishable_wQytNgKXx2GMY29zfMVbYA_kz3eRr_D'
+  key: 'sb_publishable_wQytNgKXx2GMY29zfMVbYA_kz3eRr_D',
+  // public half of the notification key pair (the private half is only in the Supabase function's secrets)
+  vapid: 'BEI19NNtjwU2bgOzJRMUUK2iqzWz4jlmyHhlgx7Dea_FaDLxJyDAG7jNoW6oHVG1OxUl01vkuSi5Rgluk8BbEi8'
 };
 })(window.CM = window.CM || {});

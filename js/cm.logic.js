@@ -182,8 +182,10 @@ defineKey('coach', () => ({msgs: []}), v => {
   return {msgs};
 });
 
-defineKey('settings', () => ({saveChat: true, sound: true}), v => ({
-  saveChat: !(isObj(v) && v.saveChat === false), sound: !(isObj(v) && v.sound === false)
+// voice: the live trainer speaks; auto: it moves to the next drill by itself (hands-free training)
+defineKey('settings', () => ({saveChat: true, sound: true, voice: true, auto: true}), v => ({
+  saveChat: !(isObj(v) && v.saveChat === false), sound: !(isObj(v) && v.sound === false),
+  voice: !(isObj(v) && v.voice === false), auto: !(isObj(v) && v.auto === false)
 }));
 
 const MISSION_N = {};
@@ -210,7 +212,8 @@ defineKey('live', () => null, v => {
       sec: int(it.sec, 0, 7200, 0), left: it.left == null ? null : int(it.left, 0, 3600, 0),
       timed: it.timed === true, how: str(it.how, 400)
     })),
-    paused: v.paused === true, ended: v.ended === true, plannedFor: isDate(v.plannedFor) ? v.plannedFor : v.date
+    paused: v.paused === true, ended: v.ended === true, plannedFor: isDate(v.plannedFor) ? v.plannedFor : v.date,
+    auto: v.auto === true, rest: v.rest == null ? null : int(v.rest, 0, 120, 0), restMax: int(v.restMax, 1, 120, 15)
   };
 });
 defineKey('meta', () => ({migrated: false}), v => ({migrated: isObj(v) && v.migrated === true}));

@@ -231,7 +231,7 @@ UI.beep = function (kind) {
       const o = actx.createOscillator(), g = actx.createGain();
       o.frequency.value = f; o.type = 'sine';
       g.gain.setValueAtTime(0.0001, actx.currentTime + i * 0.18);
-      g.gain.exponentialRampToValueAtTime(0.25, actx.currentTime + i * 0.18 + 0.02);
+      g.gain.exponentialRampToValueAtTime(kind === 'tick' ? 0.3 : 0.5, actx.currentTime + i * 0.18 + 0.02);
       g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + i * 0.18 + 0.16);
       o.connect(g); g.connect(actx.destination);
       o.start(actx.currentTime + i * 0.18); o.stop(actx.currentTime + i * 0.18 + 0.18);
@@ -239,8 +239,33 @@ UI.beep = function (kind) {
   } catch (e) {}
 };
 
+/* ---------- the coach's voice (the device's own text-to-speech, Hebrew only) ---------- */
+let heVoice = null;
+const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
+function pickVoice() {
+  try {
+    const vs = synth.getVoices();
+    // prefer a local voice: it starts faster and works without internet
+    heVoice = vs.filter(v => /^(he|iw)\b/i.test(v.lang)).sort((a, b) => (b.localService ? 1 : 0) - (a.localService ? 1 : 0))[0] || null;
+  } catch (e) { heVoice = null; }
+}
+if (synth) { pickVoice(); try { synth.addEventListener('voiceschanged', pickVoice); } catch (e) { synth.onvoiceschanged = pickVoice; } }
+UI.canSpeak = () => !!heVoice;
+// short sentences only; a new announcement replaces one still being read
+UI.say = function (text) {
+  if (!synth || !heVoice || !store.get('settings').voice || !text) return false;
+  try {
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.voice = heVoice; u.lang = heVoice.lang; u.rate = 1; u.volume = 1;
+    synth.speak(u);
+    return true;
+  } catch (e) { return false; }
+};
+UI.hush = () => { try { if (synth) synth.cancel(); } catch (e) {} };
+
 /* ---------- forms ---------- */
-UI.field = (label, inner, hint) => '<label class="field"><span class="f-lab">' + esc(label) + '</span>' + inner + (hint ? '<span class="f-hint">' + hint + '</span>' : '') + '</label>';
+UI.field =(label, inner, hint) => '<label class="field"><span class="f-lab">' + esc(label) + '</span>' + inner + (hint ? '<span class="f-hint">' + hint + '</span>' : '') + '</label>';
 UI.seg = (name, options, value) => '<div class="seg" role="radiogroup">' + Object.keys(options).map(k =>
   '<label><input type="radio" name="' + name + '" value="' + esc(k) + '"' + (String(value) === k ? ' checked' : '') + '><span>' + esc(options[k]) + '</span></label>').join('') + '</div>';
 UI.checks = (name, options, values, max) => '<div class="checks"' + (max ? ' data-max="' + max + '"' : '') + '>' + Object.keys(options).map(k =>

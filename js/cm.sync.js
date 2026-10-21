@@ -152,6 +152,7 @@ sync.errText = e => {
   return 'הפעולה לא הצליחה. נסה שוב בעוד רגע.';
 };
 
+sync.client = () => client;
 sync.signIn = async function (email, password) {
   const {data, error} = await client.auth.signInWithPassword({email, password});
   if (error) throw error;
@@ -163,6 +164,8 @@ sync.signOut = async function (keepLocal) {
   const uid = sync.user && sync.user.id;
   if (timer) { clearTimeout(timer); timer = null; }
   if (uid && sync.state !== 'ok') { try { await sync.run(); } catch (e) {} }
+  // this device should stop getting this account's reminders
+  if (CM.push) await CM.push.forgetDevice();
   try { await client.auth.signOut(); } catch (e) {}
   sync.user = null;
   raw.del(UID_KEY);
