@@ -87,7 +87,11 @@ CM.page('account', {
           '<button type="submit" class="btn primary lg">' + icon('user') + 'התחבר</button>' +
           '<p class="muted small">ההרשמה לאתר סגורה. חשבון נפתח רק על ידי מנהל האתר. שכחת סיסמה? בקש ממנו לאפס אותה.</p>' +
           '<p class="muted small">בפעם הראשונה שמתחברים במכשיר, הנתונים שכבר נמצאים בו מצטרפים לחשבון. שום דבר לא נמחק.</p>' +
-        '</form>' + privacy() + '</div>';
+        '</form>' +
+        '<section class="panel push-panel"><h2>' + icon('bell') + 'התראות לטלפון</h2>' +
+          '<p>תזכורת לפני אימון, תזכורת עדינה אם האימון עוד לא נעשה, וסיכום שבועי, גם כשהאתר סגור.</p>' +
+          '<p class="note">' + icon('info') + '<span>קודם מתחברים בטופס שלמעלה. מיד אחרי ההתחברות יופיע כאן הכפתור <b>"הפעל התראות במכשיר הזה"</b>.</span></p></section>' +
+        privacy() + '</div>';
       const form = $('.acc-form', view);
       const err = $('[data-err]', view);
       form.addEventListener('submit', async e => {
