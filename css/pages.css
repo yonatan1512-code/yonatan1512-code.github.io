@@ -422,3 +422,23 @@ details.panel > summary.sum-h .ic { color: var(--accent); }
 details.panel[open] > summary.sum-h { margin-bottom: 6px; }
 .save-state { text-decoration: none; }
 a.save-state:hover { color: var(--text); }
+
+/* ---------- hands-free live training: readable from the bench ---------- */
+.handsfree { gap: 14px; }
+.handsfree .toggle span { line-height: 1.45; }
+.hf-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; background: var(--accent-soft); color: var(--accent-hi); font-size: 13px; font-weight: 800; white-space: nowrap; }
+.live.far .live-card h1 { font-size: clamp(48px, 11vw, 88px); }
+.live.far .live-timer { width: min(84vw, 380px); }
+.live.far .live-timer b { font-size: clamp(88px, 26vw, 168px); }
+.live.far .live-timer small { bottom: 20%; font-size: 15px; }
+.far-dose { font: 700 clamp(40px, 9vw, 64px)/1 var(--f-display); color: var(--text); }
+.live.far .live-how { font-size: 19px; }
+.rest-card { background: var(--bg); border-color: var(--accent); }
+.rest-card .live-kind { color: var(--ok); font-size: 16px; }
+.rest-card .lt-fg { stroke: var(--ok); }
+.rest-card .live-timer b { color: var(--ok); text-shadow: none; }
+.rest-next { display: grid; gap: 4px; justify-items: center; }
+.rest-next small { color: var(--dim); font-weight: 800; }
+.rest-next b { font: 700 clamp(40px, 9vw, 70px)/1 var(--f-display); }
+.rest-next span { font: 700 clamp(26px, 6vw, 40px)/1.1 var(--f-display); color: var(--accent-hi); }
+@media (max-width: 560px) { .hf-badge { display: none; } }
